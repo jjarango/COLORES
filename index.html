@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Rueda de Colores">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#000000">
+    <meta name="msapplication-TileColor" content="#000000">
+    <title>Rueda de Colores Complementarios</title>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIlJ1ZWRhIGRlIENvbG9yZXMgQ29tcGxlbWVudGFyaW9zIiwKICAic2hvcnRfbmFtZSI6ICJSdWVkYSBkZSBDb2xvcmVzIiwKICAiZGVzY3JpcHRpb24iOiAiQXBsaWNhY2nDs24gcGFyYSBleHBsb3JhciBjb2xvcmVzIHkgc3VzIGNvbXBsZW1lbnRhcmlvcyIsCiAgInN0YXJ0X3VybCI6ICIuLyIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzAwMDAwMCIsCiAgInRoZW1lX2NvbG9yIjogIiMwMDAwMDAiLAogICJvcmllbnRhdGlvbiI6ICJwb3J0cmFpdCIsCiAgImljb25zIjogWwogICAgewogICAgICAic3JjIjogImRhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMlp5QjNhV1IwYUQwaU1UY3lJaUJvWldsbmFIUTlJakUzTWlJZ2RtbGxkMEp2ZUQwaU1DQXdJREUzTWlBeE56SWlJR1pwYkd3OUlpTXdNREF3TURBaUlIaHRiRzV6UFNKb2RIUndPaTh2ZDNkM0xuY3pMbTl5Wnk4eU1EQXdMM04yWnlJK1BHTnBjbU5zWlNCamVEMGlPRFlpSUdONVBTSTROaUlnY2owaU5EQWlJR1pwYkd3OUlpTXpRMU0yUmtRaVBqd3ZZMmx5WTJ4bFBqeGphWEpqYkdVZ1kzZzlJakUwTkNJZ1kzazlJalkwSWlCeVBTSXlNQ0lnWm1sc2JEMGlJek5EVFU2R1JDSStQQzlqYVhKamJHVStQQzl6ZG1jKyIsCiAgICAgICJzaXplcyI6ICIxNzJ4MTcyIiwKICAgICAgInR5cGUiOiAiaW1hZ2Uvc3ZnK3htbCIKICAgIH0sCiAgICB7CiAgICAgICJzcmMiOiAiZGF0YTppbWFnZS9zdmcreG1sO2Jhc2U2NCxQSE4yWnlCM2FXUjBhRDBpTlRFeUlpQm9aV2xuYUhROUlqVXhNaUlnZG1sbGQwSnZlRDBpTUNBd0lEVXhNaUExTVRJaUlHWnBiR3c5SWlNd01EQXdNREFpSUhodGJHNXpQU0pvZEhSd09pOHZkM2QzTG5jekxtOXlaeTh5TURBd0wzTjJaeUkrUEdOcGNtTnNaU0JqZUQwaU1qVTJJaUJqZVQwaU1qVTJJaUJ5UFNJeE1qQWlJR1pwYkd3OUlpTXpRMU0yUmtRaVBqd3ZZMmx5WTJ4bFBqeGphWEpqYkdVZ1kzZzlJalF3TUNJZ1kzazlJakU1TWlJZ2NqMGlOVEFpSUdacGJHdzlJaU16UXpVMlJrUWlQand2WTJseVkyeGxQand2YzNabkxnPT0iLAogICAgICAic2l6ZXMiOiAiNTEyeDUxMiIsCiAgICAgICJ0eXBlIjogImltYWdlL3N2Zyt4bWwiCiAgICB9CiAgXQp9">
+    
+    <!-- PWA Icons -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTcyIiBoZWlnaHQ9IjE3MiIgdmlld0JveD0iMCAwIDE3MiAxNzIiIGZpbGw9IiMwMDAwMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iODYiIGN5PSI4NiIgcj0iNDAiIGZpbGw9IiMzQzM2RkQiPjwvY2lyY2xlPjxjaXJjbGUgY3g9IjE0NCIgY3k9IjY0IiByPSIyMCIgZmlsbD0iIzNDRk02RkQiPjwvY2lyY2xlPjwvc3ZnPg==">
+    <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTcyIiBoZWlnaHQ9IjE3MiIgdmlld0JveD0iMCAwIDE3MiAxNzIiIGZpbGw9IiMwMDAwMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iODYiIGN5PSI4NiIgcj0iNDAiIGZpbGw9IiMzQzM2RkQiPjwvY2lyY2xlPjxjaXJjbGUgY3g9IjE0NCIgY3k9IjY0IiByPSIyMCIgZmlsbD0iIzNDRk02RkQiPjwvY2lyY2xlPjwvc3ZnPg==">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000000;
+            min-height: 100vh;
+            width: 100vw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1vw;
+            margin: 0;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            touch-action: manipulation;
+        }
+
+        .container {
+            background: #0a0a0a;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            padding: 1vw;
+            width: 99vw;
+            max-width: none;
+            height: 98vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 1vh;
+            flex-shrink: 0;
+        }
+
+        .main-content {
+            display: flex;
+            flex: 1;
+            gap: 2vw;
+            height: 100%;
+        }
+
+        .left-panel {
+            flex: 2.5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1vh;
+        }
+
+        .right-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2vh;
+            padding: 2vh;
+            background: #1a1a1a;
+            border-radius: 10px;
+            border: 1px solid #333;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 1vh;
+            flex-shrink: 0;
+        }
+
+        .header h1 {
+            color: #ffffff;
+            margin-bottom: 0.5vh;
+            font-size: clamp(1.8em, 3vw, 4em);
+        }
+
+        .header p {
+            color: #ffffff;
+            font-size: clamp(1.2em, 2.5vw, 3.5em);
+            font-weight: bold;
+            margin-top: 0.5vh;
+        }
+
+        .app-content {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .wheel-container {
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        #colorWheel {
+            border-radius: 50%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            cursor: crosshair;
+            transition: transform 0.3s ease;
+        }
+
+        #colorWheel:hover {
+            transform: scale(1.02);
+        }
+
+        .info-panel {
+            flex: 1;
+            min-width: 300px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            border: 2px solid #e9ecef;
+        }
+
+        .color-display {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .color-box {
+            flex: 1;
+            text-align: center;
+        }
+
+        .color-sample {
+            width: 100%;
+            height: 80px;
+            border-radius: 10px;
+            border: 3px solid #fff;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 10px;
+            transition: transform 0.2s ease;
+        }
+
+        .color-sample:hover {
+            transform: translateY(-2px);
+        }
+
+        .color-name {
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .color-code {
+            font-family: 'Courier New', monospace;
+            background: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        .instructions {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        .instructions p {
+            color: #1565c0;
+            margin: 0;
+            font-weight: 500;
+        }
+
+        .coordinates {
+            margin-top: 15px;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .selected-colors {
+            margin-top: 30px;
+            background: #fff;
+            border-radius: 15px;
+            padding: 20px;
+            border: 2px solid #e9ecef;
+            text-align: center;
+        }
+
+        .selected-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .selected-display {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .selected-color-box {
+            text-align: center;
+        }
+
+        .selected-color-sample {
+            width: 80px;
+            height: 80px;
+            border-radius: 10px;
+            border: 3px solid #fff;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            margin-bottom: 8px;
+            transition: transform 0.2s ease;
+        }
+
+        .selected-color-sample:hover {
+            transform: scale(1.05);
+        }
+
+        .selected-color-name {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 3px;
+            font-size: 0.9em;
+        }
+
+        .selected-color-code {
+            font-family: 'Courier New', monospace;
+            background: #f8f9fa;
+            padding: 3px 8px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            font-size: 0.8em;
+            color: #555;
+        }
+
+        .vs-divider {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #666;
+            margin: 0 10px;
+        }
+
+        .click-instruction {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+
+        .click-instruction p {
+            color: #856404;
+            margin: 0;
+            font-weight: 500;
+            font-size: 0.9em;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (min-width: 1920px) {
+            #colorWheel {
+                width: 72vh;
+                height: 72vh;
+                max-width: 72vh;
+                max-height: 72vh;
+            }
+        }
+
+        @media (min-width: 2560px) {
+            #colorWheel {
+                width: 68vh;
+                height: 68vh;
+                max-width: 68vh;
+                max-height: 68vh;
+            }
+        }
+
+        @media (min-width: 3840px) {
+            #colorWheel {
+                width: 64vh;
+                height: 64vh;
+                max-width: 64vh;
+                max-height: 64vh;
+            }
+        }
+
+        /* Optimización para tablets */
+        @media (max-width: 1200px) and (min-width: 769px) {
+            .main-content {
+                flex-direction: column;
+                gap: 3vh;
+            }
+            
+            .left-panel {
+                flex: none;
+                height: 65vh;
+                padding: 1vh;
+            }
+            
+            .right-panel {
+                flex: none;
+                flex-direction: row;
+                gap: 3vw;
+                height: auto;
+                padding: 2vh 3vw;
+            }
+            
+            #colorWheel {
+                width: 60vh;
+                height: 60vh;
+                max-width: 75vw;
+                max-height: 75vw;
+            }
+            
+            .current-colors-section,
+            .selected-colors-section {
+                flex: 1;
+                padding: 2vh;
+            }
+            
+            .section-title {
+                font-size: 1.1em;
+            }
+            
+            .color-sample,
+            .selected-color-sample {
+                height: 45px;
+            }
+        }
+
+        /* Optimización para móviles muy pequeños */
+        @media (max-width: 480px) {
+            .container {
+                padding: 1vw;
+            }
+            
+            .header h1 {
+                font-size: clamp(1.3em, 7vw, 2em);
+            }
+            
+            .header p {
+                font-size: clamp(1em, 5vw, 1.5em);
+            }
+            
+            #colorWheel {
+                width: 50vh;
+                height: 50vh;
+                max-width: 90vw;
+                max-height: 90vw;
+                min-width: 250px;
+                min-height: 250px;
+            }
+            
+            .right-panel {
+                padding: 1.5vh 2vw;
+                margin: 0;
+            }
+            
+            .color-display {
+                gap: 4vw;
+            }
+            
+            .selected-display {
+                gap: 4vw;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .main-content {
+                flex-direction: column;
+                gap: 2vh;
+            }
+            
+            .left-panel {
+                flex: none;
+                height: 60vh;
+            }
+            
+            .right-panel {
+                flex: none;
+                flex-direction: row;
+                gap: 2vw;
+                height: auto;
+                padding: 2vh;
+            }
+            
+            #colorWheel {
+                width: 50vh;
+                height: 50vh;
+                max-width: 50vh;
+                max-height: 50vh;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                width: 100vw;
+                height: 100vh;
+                padding: 0.5vw;
+                border-radius: 0;
+            }
+            
+            .header {
+                margin-bottom: 1vh;
+            }
+            
+            .header h1 {
+                font-size: clamp(1.5em, 6vw, 2.5em);
+                margin-bottom: 0.5vh;
+            }
+            
+            .header p {
+                font-size: clamp(1.2em, 4vw, 2em);
+            }
+            
+            .main-content {
+                flex-direction: column;
+                gap: 2vh;
+                height: calc(100vh - 15vh);
+            }
+            
+            .left-panel {
+                flex: none;
+                height: 60vh;
+                padding: 0;
+            }
+            
+            .right-panel {
+                flex: none;
+                height: auto;
+                flex-direction: column;
+                gap: 1.5vh;
+                padding: 2vh 3vw;
+                margin: 0 1vw;
+            }
+            
+            #colorWheel {
+                width: 55vh;
+                height: 55vh;
+                max-width: 85vw;
+                max-height: 85vw;
+                min-width: 280px;
+                min-height: 280px;
+            }
+            
+            .current-colors-section,
+            .selected-colors-section {
+                padding: 1.5vh 2vw;
+            }
+            
+            .section-title {
+                font-size: 1.1em;
+                margin-bottom: 1vh;
+            }
+            
+            .color-display {
+                gap: 3vw;
+                margin-bottom: 1vh;
+            }
+            
+            .color-sample {
+                height: 50px;
+                border-radius: 8px;
+                border: 2px solid #333;
+            }
+            
+            .color-name {
+                font-size: 0.9em;
+                margin-bottom: 0.5vh;
+            }
+            
+            .color-code {
+                font-size: 0.8em;
+                padding: 0.8vh 2vw;
+                border-radius: 6px;
+            }
+            
+            .selected-color-sample {
+                height: 50px;
+                border-radius: 8px;
+                border: 2px solid #333;
+            }
+            
+            .selected-color-name {
+                font-size: 0.9em;
+                margin-bottom: 0.5vh;
+            }
+            
+            .selected-color-code {
+                font-size: 0.8em;
+                padding: 0.8vh 2vw;
+                border-radius: 6px;
+            }
+            
+            .vs-divider {
+                font-size: 1.3em;
+                margin: 1vh 1vw;
+            }
+            
+            .coordinates {
+                font-size: 0.8em;
+                margin-top: 1vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎨 Rueda de Colores Complementarios</h1>
+            <p style="font-size: 2.6em; color: #ffffff; margin-top: 15px; font-weight: bold;">jjarango</p>
+        </div>
+
+        <div class="main-content">
+            <div class="left-panel">
+                <div class="wheel-container">
+                    <canvas id="colorWheel"></canvas>
+                </div>
+            </div>
+
+            <div class="right-panel">
+                <div class="current-colors-section">
+                    <div class="section-title">Colores Actuales</div>
+                    <div class="color-display">
+                        <div class="color-box">
+                            <div class="color-sample" id="currentColor"></div>
+                            <div class="color-name" id="currentColorName">Actual</div>
+                            <div class="color-code" id="currentColorCode">#000000</div>
+                        </div>
+                        <div class="color-box">
+                            <div class="color-sample" id="complementColor"></div>
+                            <div class="color-name" id="complementColorName">Complementario</div>
+                            <div class="color-code" id="complementColorCode">#FFFFFF</div>
+                        </div>
+                    </div>
+                    <div class="coordinates" id="colorInfo">
+                        Matiz: 0° | Saturación: 0% | Luminosidad: 0%
+                    </div>
+                </div>
+
+                <div class="selected-colors-section">
+                    <div class="selected-colors" id="selectedColorsPanel">
+                        <div class="selected-title">Colores Seleccionados</div>
+                        <div class="selected-display">
+                            <div class="selected-color-box">
+                                <div class="selected-color-sample" id="selectedCurrentColor"></div>
+                                <div class="selected-color-name" id="selectedCurrentColorName">Principal</div>
+                                <div class="selected-color-code" id="selectedCurrentColorCode">#000000</div>
+                            </div>
+                            <div class="vs-divider">VS</div>
+                            <div class="selected-color-box">
+                                <div class="selected-color-sample" id="selectedComplementColor"></div>
+                                <div class="selected-color-name" id="selectedComplementColorName">Complementario</div>
+                                <div class="selected-color-code" id="selectedComplementColorCode">#FFFFFF</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('colorWheel');
+        const ctx = canvas.getContext('2d');
+        let centerX, centerY, radius;
+
+        function updateCanvasSize() {
+            // Obtener el tamaño actual del canvas según CSS
+            const rect = canvas.getBoundingClientRect();
+            const size = Math.min(rect.width, rect.height);
+            
+            // Configurar el canvas con alta resolución para pantallas 4K
+            const devicePixelRatio = window.devicePixelRatio || 1;
+            canvas.width = size * devicePixelRatio;
+            canvas.height = size * devicePixelRatio;
+            
+            // Escalar el contexto para alta resolución
+            ctx.scale(devicePixelRatio, devicePixelRatio);
+            
+            // Configurar el tamaño de display
+            canvas.style.width = size + 'px';
+            canvas.style.height = size + 'px';
+            
+            // Actualizar variables globales
+            centerX = size / 2;
+            centerY = size / 2;
+            radius = Math.min(centerX, centerY) - 10;
+            
+            // Redibujar la rueda
+            drawColorWheel();
+        }
+
+        // Base de datos de nombres de colores
+        const colorNames = {
+            0: "Rojo", 15: "Rojo-Naranja", 30: "Naranja", 45: "Naranja-Amarillo",
+            60: "Amarillo", 75: "Amarillo-Verde", 90: "Verde-Amarillo", 120: "Verde",
+            150: "Verde-Azul", 180: "Cian", 195: "Azul-Cian", 210: "Azul Claro",
+            240: "Azul", 270: "Azul-Violeta", 285: "Violeta", 300: "Magenta",
+            315: "Rosa-Magenta", 330: "Rosa", 345: "Rosa-Rojo"
+        };
+
+        function getColorName(hue) {
+            // Encontrar el nombre más cercano
+            let closestHue = 0;
+            let minDiff = Math.abs(hue - 0);
+            
+            for (let namedHue in colorNames) {
+                let diff = Math.abs(hue - parseInt(namedHue));
+                if (diff < minDiff) {
+                    minDiff = diff;
+                    closestHue = namedHue;
+                }
+            }
+            
+            return colorNames[closestHue];
+        }
+
+        function drawColorWheel() {
+            // Limpiar canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Dibujar la rueda de colores
+            for (let angle = 0; angle < 360; angle += 1) {
+                const gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, radius);
+                
+                // Centro blanco, exterior con color del matiz
+                gradient.addColorStop(0, 'white');
+                gradient.addColorStop(0.7, `hsl(${angle}, 100%, 50%)`);
+                gradient.addColorStop(1, `hsl(${angle}, 100%, 25%)`);
+                
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.arc(centerX, centerY, radius, (angle - 0.5) * Math.PI / 180, (angle + 0.5) * Math.PI / 180);
+                ctx.closePath();
+                ctx.fillStyle = gradient;
+                ctx.fill();
+            }
+            
+            // Dibujar círculo interior para mejor saturación
+            const innerRadius = radius * 0.15;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, innerRadius, 0, 2 * Math.PI);
+            ctx.fillStyle = 'white';
+            ctx.fill();
+            
+            // Borde exterior
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+            ctx.strokeStyle = '#666';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        }
+
+        function getColorAtPosition(x, y) {
+            const dx = x - centerX;
+            const dy = y - centerY;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            
+            if (distance > radius) return null;
+            
+            // Calcular ángulo (matiz)
+            let angle = Math.atan2(dy, dx) * 180 / Math.PI;
+            if (angle < 0) angle += 360;
+            
+            // Calcular saturación basada en la distancia del centro
+            const saturation = Math.min(100, (distance / radius) * 100);
+            
+            // Luminosidad fija para colores vibrantes
+            const lightness = 50;
+            
+            return {
+                hue: Math.round(angle),
+                saturation: Math.round(saturation),
+                lightness: lightness,
+                distance: distance
+            };
+        }
+
+        function hslToHex(h, s, l) {
+            l /= 100;
+            const a = s * Math.min(l, 1 - l) / 100;
+            const f = n => {
+                const k = (n + h / 30) % 12;
+                const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+                return Math.round(255 * color).toString(16).padStart(2, '0');
+            };
+            return `#${f(0)}${f(8)}${f(4)}`;
+        }
+
+        function updateColorInfo(colorData) {
+            if (!colorData) return;
+            
+            const { hue, saturation, lightness } = colorData;
+            const currentHex = hslToHex(hue, saturation, lightness);
+            
+            // Color complementario (180 grados opuesto)
+            const complementHue = (hue + 180) % 360;
+            const complementHex = hslToHex(complementHue, saturation, lightness);
+            
+            // Actualizar elementos del DOM
+            document.getElementById('currentColor').style.backgroundColor = currentHex;
+            document.getElementById('currentColorName').textContent = getColorName(hue);
+            document.getElementById('currentColorCode').textContent = currentHex.toUpperCase();
+            
+            document.getElementById('complementColor').style.backgroundColor = complementHex;
+            document.getElementById('complementColorName').textContent = getColorName(complementHue);
+            document.getElementById('complementColorCode').textContent = complementHex.toUpperCase();
+            
+            document.getElementById('colorInfo').textContent = 
+                `Matiz: ${hue}° | Saturación: ${saturation}% | Luminosidad: ${lightness}%`;
+        }
+
+        function updateSelectedColors(colorData) {
+            if (!colorData) return;
+            
+            const { hue, saturation, lightness } = colorData;
+            const currentHex = hslToHex(hue, saturation, lightness);
+            
+            // Color complementario (180 grados opuesto)
+            const complementHue = (hue + 180) % 360;
+            const complementHex = hslToHex(complementHue, saturation, lightness);
+            
+            // Actualizar colores seleccionados
+            document.getElementById('selectedCurrentColor').style.backgroundColor = currentHex;
+            document.getElementById('selectedCurrentColorName').textContent = getColorName(hue);
+            document.getElementById('selectedCurrentColorCode').textContent = currentHex.toUpperCase();
+            
+            document.getElementById('selectedComplementColor').style.backgroundColor = complementHex;
+            document.getElementById('selectedComplementColorName').textContent = getColorName(complementHue);
+            document.getElementById('selectedComplementColorCode').textContent = complementHex.toUpperCase();
+        }
+
+        // Event listeners para mouse
+        canvas.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = centerX * 2 / rect.width;
+            const scaleY = centerY * 2 / rect.height;
+            const x = (e.clientX - rect.left) * scaleX;
+            const y = (e.clientY - rect.top) * scaleY;
+            
+            const colorData = getColorAtPosition(x, y);
+            if (colorData && colorData.distance <= radius) {
+                updateColorInfo(colorData);
+            }
+        });
+
+        canvas.addEventListener('click', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = centerX * 2 / rect.width;
+            const scaleY = centerY * 2 / rect.height;
+            const x = (e.clientX - rect.left) * scaleX;
+            const y = (e.clientY - rect.top) * scaleY;
+            
+            const colorData = getColorAtPosition(x, y);
+            if (colorData && colorData.distance <= radius) {
+                updateSelectedColors(colorData);
+            }
+        });
+
+        // Event listeners para touch (móviles)
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = centerX * 2 / rect.width;
+            const scaleY = centerY * 2 / rect.height;
+            const x = (touch.clientX - rect.left) * scaleX;
+            const y = (touch.clientY - rect.top) * scaleY;
+            
+            const colorData = getColorAtPosition(x, y);
+            if (colorData && colorData.distance <= radius) {
+                updateColorInfo(colorData);
+                updateSelectedColors(colorData);
+            }
+        });
+
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = centerX * 2 / rect.width;
+            const scaleY = centerY * 2 / rect.height;
+            const x = (touch.clientX - rect.left) * scaleX;
+            const y = (touch.clientY - rect.top) * scaleY;
+            
+            const colorData = getColorAtPosition(x, y);
+            if (colorData && colorData.distance <= radius) {
+                updateColorInfo(colorData);
+            }
+        });
+
+        canvas.addEventListener('mouseleave', () => {
+            // Resetear a colores por defecto
+            document.getElementById('currentColor').style.backgroundColor = '#ff0000';
+            document.getElementById('currentColorName').textContent = 'Actual';
+            document.getElementById('currentColorCode').textContent = '#FF0000';
+            
+            document.getElementById('complementColor').style.backgroundColor = '#00ffff';
+            document.getElementById('complementColorName').textContent = 'Complementario';
+            document.getElementById('complementColorCode').textContent = '#00FFFF';
+            
+            document.getElementById('colorInfo').textContent = 'Matiz: 0° | Saturación: 100% | Luminosidad: 50%';
+        });
+
+        // Inicializar y configurar eventos de redimensionamiento
+        updateCanvasSize();
+        window.addEventListener('resize', updateCanvasSize);
+        
+        // Configurar colores iniciales
+        document.getElementById('currentColor').style.backgroundColor = '#ff0000';
+        document.getElementById('complementColor').style.backgroundColor = '#00ffff';
+        document.getElementById('selectedCurrentColor').style.backgroundColor = '#ff0000';
+        document.getElementById('selectedComplementColor').style.backgroundColor = '#00ffff';
+
+        // Registrar Service Worker para PWA
+        if ('serviceWorker' in navigator) {
+            // Service Worker inline
+            const swCode = `
+                const CACHE_NAME = 'rueda-colores-v1';
+                const urlsToCache = [
+                    './',
+                    './?source=pwa'
+                ];
+
+                self.addEventListener('install', function(event) {
+                    event.waitUntil(
+                        caches.open(CACHE_NAME)
+                            .then(function(cache) {
+                                return cache.addAll(urlsToCache);
+                            })
+                    );
+                });
+
+                self.addEventListener('fetch', function(event) {
+                    event.respondWith(
+                        caches.match(event.request)
+                            .then(function(response) {
+                                if (response) {
+                                    return response;
+                                }
+                                return fetch(event.request);
+                            }
+                        )
+                    );
+                });
+            `;
+
+            const blob = new Blob([swCode], { type: 'application/javascript' });
+            const swUrl = URL.createObjectURL(blob);
+
+            navigator.serviceWorker.register(swUrl)
+                .then(function(registration) {
+                    console.log('Service Worker registrado exitosamente:', registration.scope);
+                })
+                .catch(function(error) {
+                    console.log('Error al registrar Service Worker:', error);
+                });
+        }
+
+        // Detectar si la app se puede instalar
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            // Mostrar botón de instalación personalizado si quieres
+            // console.log('App puede ser instalada');
+        });
+
+        // Detectar cuando la app se instala
+        window.addEventListener('appinstalled', (evt) => {
+            console.log('App instalada exitosamente');
+        });
+    </script>
+</body>
+</html>
