@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rueda de Colores Complementarios</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background:#000; min-height:100vh; width:100vw; display:flex;
+            align-items:center; justify-content:center; padding:1vw; overflow-x:hidden;
+        }
+        .container {
+            background:#0a0a0a; border-radius:20px; box-shadow:0 20px 40px rgba(0,0,0,.5);
+            padding:1vw; width:99vw; height:98vh; display:flex; flex-direction:column;
+        }
+        .header { text-align:center; margin-bottom:1vh; flex-shrink:0; }
+        .header h1 { color:#fff; margin-bottom:.5vh; font-size:clamp(1.8em,3vw,4em); }
+        .header p { color:#fff; font-size:clamp(1.2em,2.5vw,3.5em); font-weight:bold; margin-top:.5vh; }
+        .main-content { display:flex; flex:1; gap:2vw; height:100%; }
+        .left-panel { flex:2.5; display:flex; align-items:center; justify-content:center; padding:1vh; }
+        .right-panel { flex:1; display:flex; flex-direction:column; gap:2vh; padding:2vh; background:#1a1a1a; border-radius:10px; border:1px solid #333; }
+
+        .wheel-container { position:relative; display:flex; flex-direction:column; align-items:center; }
+        #colorWheel {
+            width:72vh; height:72vh; max-width:90vh; max-height:90vh;
+            border-radius:50%; box-shadow:0 10px 30px rgba(0,0,0,.2);
+            cursor:crosshair; transition:transform .3s ease;
+        }
+        #colorWheel:hover { transform:scale(1.02); }
+        .wheel-hint { margin-top:8px; font-size:.9em; color:#bbb; text-align:center; user-select:none; }
+        .color-display { display:flex; gap:20px; margin-bottom:10px; }
+        .color-box { flex:1; text-align:center; }
+        .color-sample { width:100%; height:80px; border-radius:10px; border:3px solid #fff; box-shadow:0 4px 15px rgba(0,0,0,.1); margin-bottom:10px; transition:transform .2s ease; }
+        .color-sample:hover { transform: translateY(-2px); }
+        .color-name { font-weight:bold; font-size:1.1em; color:#ddd; margin-bottom:5px; }
+        .color-code { font-family:'Courier New', monospace; background:#fff; padding:5px 10px; border-radius:5px; border:1px solid #ddd; font-size:.9em; color:#555; }
+        .color-input { width:100%; padding:8px 10px; border-radius:8px; border:1px solid #ddd; font-family:'Courier New', monospace; font-size:1em; color:#333; outline:none; }
+        .color-input.invalid { border-color:#e53935; box-shadow:0 0 0 3px rgba(229,57,53,.15); }
+        .input-hint { margin-top:6px; font-size:.85em; color:#888; text-align:center; }
+        .coordinates { margin-top:15px; font-size:.9em; color:#ccc; }
+        .selected-colors { margin-top:20px; background:#fff; border-radius:15px; padding:20px; border:2px solid #e9ecef; text-align:center; }
+        .selected-title { font-size:1.2em; font-weight:bold; color:#333; margin-bottom:15px; }
+        .selected-display { display:flex; gap:15px; justify-content:center; align-items:center; }
+        .selected-color-box { text-align:center; }
+        .selected-color-sample { width:80px; height:80px; border-radius:10px; border:3px solid #fff; box-shadow:0 4px 15px rgba(0,0,0,.15); margin-bottom:8px; transition:transform .2s ease; }
+        .selected-color-sample:hover { transform:scale(1.05); }
+        .selected-color-name { font-weight:bold; color:#333; margin-bottom:3px; font-size:.9em; }
+        .selected-color-code { font-family:'Courier New', monospace; background:#f8f9fa; padding:3px 8px; border-radius:4px; border:1px solid #ddd; font-size:.8em; color:#555; }
+        .vs-divider { font-size:1.5em; font-weight:bold; color:#666; margin:0 10px; }
+        .section-title { color:#fff; font-weight:800; font-size:1.3em; margin-bottom:10px; letter-spacing:.3px; }
+
+        @media (max-width: 1200px) {
+            .main-content { flex-direction:column; gap:2vh; }
+            .left-panel { flex:none; height:60vh; }
+            .right-panel { flex:none; flex-direction:row; gap:2vw; height:auto; padding:2vh; }
+            #colorWheel { width:56vh; height:56vh; max-width:56vh; max-height:56vh; }
+        }
+        @media (max-width: 768px) {
+            .container { width:99vw; height:99vh; padding:.5vw; }
+            .main-content { flex-direction:column; gap:1.5vh; }
+            .left-panel { height:50vh; }
+            .right-panel { flex-direction:column; gap:1.5vh; padding:1.5vh; }
+            #colorWheel { width:40vh; height:40vh; max-width:40vh; max-height:40vh; min-width:250px; min-height:250px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎨 Rueda de Colores Complementarios</h1>
+            <p style="font-size: 2.6em; color: #ffffff; margin-top: 15px; font-weight: bold;">jjarango</p>
+        </div>
+
+        <div class="main-content">
+            <div class="left-panel">
+                <div class="wheel-container">
+                    <canvas id="colorWheel"></canvas>
+                    <div class="wheel-hint" id="wheelHint">Clic izquierdo: fijar color. Clic derecho: volver a explorar.</div>
+                </div>
+            </div>
+
+            <div class="right-panel">
+                <div class="current-colors-section">
+                    <div class="section-title">Colores Actuales</div>
+                    <div class="color-display">
+                        <div class="color-box">
+                            <div class="color-sample" id="currentColor"></div>
+                            <div class="color-name" id="currentColorName">Actual</div>
+                            <input class="color-input" id="currentColorCode"
+                                   value="#FF0000" spellcheck="false" autocapitalize="off" autocomplete="off"
+                                   inputmode="text" maxlength="7" placeholder="#RRGGBB" />
+                            <div class="input-hint">Puede digitar un color HEX aquí (#RRGGBB). Se muestra su complementario automáticamente.</div>
+                        </div>
+                        <div class="color-box">
+                            <div class="color-sample" id="complementColor"></div>
+                            <div class="color-name" id="complementColorName">Complementario</div>
+                            <div class="color-code" id="complementColorCode">#00FFFF</div>
+                        </div>
+                    </div>
+                    <div class="coordinates" id="colorInfo">
+                        Matiz: 0° | Saturación: 100% | Luminosidad: 50%
+                    </div>
+                </div>
+
+                <div class="selected-colors-section">
+                    <div class="selected-colors" id="selectedColorsPanel">
+                        <div class="selected-title">Colores Seleccionados</div>
+                        <div class="selected-display">
+                            <div class="selected-color-box">
+                                <div class="selected-color-sample" id="selectedCurrentColor"></div>
+                                <div class="selected-color-name" id="selectedCurrentColorName">Principal</div>
+                                <div class="selected-color-code" id="selectedCurrentColorCode">#FF0000</div>
+                            </div>
+                            <div class="vs-divider">VS</div>
+                            <div class="selected-color-box">
+                                <div class="selected-color-sample" id="selectedComplementColor"></div>
+                                <div class="selected-color-name" id="selectedComplementColorName">Complementario</div>
+                                <div class="selected-color-code" id="selectedComplementColorCode">#00FFFF</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('colorWheel');
+        const ctx = canvas.getContext('2d');
+        let centerX, centerY, radius;
+
+        // Estados
+        let isEditingHex = false;
+        let isFrozen = false;
+
+        function setFrozen(state) {
+            isFrozen = state;
+            const hint = document.getElementById('wheelHint');
+            hint.textContent = isFrozen
+              ? 'Color fijado. Clic derecho sobre la rueda para volver a explorar.'
+              : 'Clic izquierdo: fijar color. Clic derecho: volver a explorar.';
+        }
+
+        function updateCanvasSize() {
+            const rect = canvas.getBoundingClientRect();
+            const size = Math.min(rect.width, rect.height);
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = size * dpr;
+            canvas.height = size * dpr;
+            ctx.setTransform(1,0,0,1,0,0);
+            ctx.scale(dpr, dpr);
+            canvas.style.width = size + 'px';
+            canvas.style.height = size + 'px';
+            centerX = size / 2;
+            centerY = size / 2;
+            radius = Math.min(centerX, centerY) - 10;
+            drawColorWheel();
+        }
+
+        const colorNames = {
+            0: "Rojo", 15: "Rojo-Naranja", 30: "Naranja", 45: "Naranja-Amarillo",
+            60: "Amarillo", 75: "Amarillo-Verde", 90: "Verde-Amarillo", 120: "Verde",
+            150: "Verde-Azul", 180: "Cian", 195: "Azul-Cian", 210: "Azul Claro",
+            240: "Azul", 270: "Azul-Violeta", 285: "Violeta", 300: "Magenta",
+            315: "Rosa-Magenta", 330: "Rosa", 345: "Rosa-Rojo"
+        };
+        function getColorName(hue) {
+            let closestHue = 0, minDiff = Math.abs(hue - 0);
+            for (let namedHue in colorNames) {
+                let diff = Math.abs(hue - parseInt(namedHue));
+                if (diff < minDiff) { minDiff = diff; closestHue = namedHue; }
+            }
+            return colorNames[closestHue];
+        }
+
+        function drawColorWheel() {
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            for (let angle = 0; angle < 360; angle += 1) {
+                const gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, radius);
+                gradient.addColorStop(0,'white');
+                gradient.addColorStop(0.7,`hsl(${angle}, 100%, 50%)`);
+                gradient.addColorStop(1,`hsl(${angle}, 100%, 25%)`);
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.arc(centerX, centerY, radius, (angle-0.5)*Math.PI/180, (angle+0.5)*Math.PI/180);
+                ctx.closePath();
+                ctx.fillStyle = gradient;
+                ctx.fill();
+            }
+            const innerRadius = radius * 0.15;
+            ctx.beginPath(); ctx.arc(centerX, centerY, innerRadius, 0, 2*Math.PI);
+            ctx.fillStyle = 'white'; ctx.fill();
+            ctx.beginPath(); ctx.arc(centerX, centerY, radius, 0, 2*Math.PI);
+            ctx.strokeStyle = '#666'; ctx.lineWidth = 2; ctx.stroke();
+        }
+
+        function getColorAtPosition(x,y){
+            const dx=x-centerX, dy=y-centerY;
+            const distance=Math.sqrt(dx*dx+dy*dy);
+            if (distance>radius) return null;
+            let angle=Math.atan2(dy,dx)*180/Math.PI; if (angle<0) angle+=360;
+            const saturation=Math.min(100,(distance/radius)*100);
+            const lightness=50;
+            return { hue:angle, saturation:saturation, lightness:lightness, distance:distance };
+        }
+
+        // Precisión alta: conversiones sin redondeo hasta la última etapa
+        function hslToHex(h,s,l){
+            // h[0..360), s[0..100], l[0..100] como floats
+            s/=100; l/=100;
+            const c=(1-Math.abs(2*l-1))*s;
+            const hp=(h/60)%6;
+            const x=c*(1-Math.abs(hp%2-1));
+            let r=0,g=0,b=0;
+            if (0<=hp && hp<1){ r=c; g=x; b=0; }
+            else if (1<=hp && hp<2){ r=x; g=c; b=0; }
+            else if (2<=hp && hp<3){ r=0; g=c; b=x; }
+            else if (3<=hp && hp<4){ r=0; g=x; b=c; }
+            else if (4<=hp && hp<5){ r=x; g=0; b=c; }
+            else if (5<=hp && hp<6){ r=c; g=0; b=x; }
+            const m=l-c/2;
+            r=Math.round((r+m)*255); g=Math.round((g+m)*255); b=Math.round((b+m)*255);
+            return '#' + [r,g,b].map(v=>v.toString(16).padStart(2,'0')).join('').toUpperCase();
+        }
+        function hexToRgb(hex){ hex=hex.replace('#',''); if (hex.length===3) hex=hex.split('').map(c=>c+c).join(''); const num=parseInt(hex,16); return {r:(num>>16)&255,g:(num>>8)&255,b:num&255}; }
+        function rgbToHsl(r,g,b){
+            r/=255; g/=255; b/=255;
+            const max=Math.max(r,g,b), min=Math.min(r,g,b);
+            let h=0, s=0, l=(max+min)/2;
+            if (max !== min) {
+                const d=max-min;
+                s = l>0.5 ? d/(2-max-min) : d/(max+min);
+                switch(max){ case r:h=(g-b)/d+(g<b?6:0);break; case g:h=(b-r)/d+2;break; case b:h=(r-g)/d+4;break; }
+                h/=6;
+            }
+            return { h: h*360, s: s*100, l: l*100 };
+        }
+        function hexToHsl(hex){ const {r,g,b}=hexToRgb(hex); return rgbToHsl(r,g,b); }
+        function normalizeHex(input){ let v=String(input).trim(); if(!v) return ''; if(v[0]!=='#') v='#'+v; if(v.length===4) v='#'+v.slice(1).split('').map(c=>c+c).join(''); return v.toUpperCase(); }
+        function isValidHex(hex){ return /^#([0-9A-F]{6})$/.test(hex); }
+
+        // --- Aplicadores ---
+        function applyHsl(h,s,l,updateSelected=true){
+            // Usa HSL como fuente (rueda). Calcula HEX desde HSL.
+            const currentHex = hslToHex(h, s, l);
+            updateFromCurrentHex(currentHex, h, s, l, updateSelected);
+        }
+
+        function applyHex(hex, updateSelected=true){
+            // Preserva exactamente el HEX introducido por el usuario
+            const hsl = hexToHsl(hex); // floats
+            updateFromCurrentHex(hex, hsl.h, hsl.s, hsl.l, updateSelected);
+        }
+
+        function updateFromCurrentHex(hex, h, s, l, updateSelected){
+            // Complementario rotando el matiz 180° con mismas s/l (floats)
+            const compHex = hslToHex((h + 180) % 360, s, l);
+
+            // Muestras principales
+            document.getElementById('currentColor').style.backgroundColor = hex;
+            document.getElementById('currentColorName').textContent = getColorName(Math.round(h));
+            const input=document.getElementById('currentColorCode');
+            if (!isEditingHex) input.value = hex.toUpperCase();
+            input.classList.remove('invalid');
+
+            document.getElementById('complementColor').style.backgroundColor = compHex;
+            document.getElementById('complementColorName').textContent = getColorName(Math.round((h+180)%360));
+            document.getElementById('complementColorCode').textContent = compHex.toUpperCase();
+
+            document.getElementById('colorInfo').textContent = 
+                `Matiz: ${Math.round(h)}° | Saturación: ${Math.round(s)}% | Luminosidad: ${Math.round(l)}%`;
+
+            if (updateSelected){
+                document.getElementById('selectedCurrentColor').style.backgroundColor = hex;
+                document.getElementById('selectedCurrentColorName').textContent = getColorName(Math.round(h));
+                document.getElementById('selectedCurrentColorCode').textContent = hex.toUpperCase();
+
+                document.getElementById('selectedComplementColor').style.backgroundColor = compHex;
+                document.getElementById('selectedComplementColorName').textContent = getColorName(Math.round((h+180)%360));
+                document.getElementById('selectedComplementColorCode').textContent = compHex.toUpperCase();
+            }
+        }
+
+        // --- Interacción con la rueda ---
+        canvas.addEventListener('mousemove', (e)=>{
+            if (isEditingHex || isFrozen) return;
+            const rect=canvas.getBoundingClientRect();
+            const scaleX=centerX*2/rect.width, scaleY=centerY*2/rect.height;
+            const x=(e.clientX-rect.left)*scaleX, y=(e.clientY-rect.top)*scaleY;
+            const colorData=getColorAtPosition(x,y);
+            if(colorData && colorData.distance<=radius) applyHsl(colorData.hue, colorData.saturation, colorData.lightness, false);
+        });
+        canvas.addEventListener('click', (e)=>{
+            if (isEditingHex) return;
+            const rect=canvas.getBoundingClientRect();
+            const scaleX=centerX*2/rect.width, scaleY=centerY*2/rect.height;
+            const x=(e.clientX-rect.left)*scaleX, y=(e.clientY-rect.top)*scaleY;
+            const colorData=getColorAtPosition(x,y);
+            if(colorData && colorData.distance<=radius) {
+                setFrozen(true);
+                applyHsl(colorData.hue, colorData.saturation, colorData.lightness, true);
+            }
+        });
+        canvas.addEventListener('contextmenu', (e)=>{ e.preventDefault(); setFrozen(false); return false; });
+        canvas.addEventListener('mouseleave', ()=>{ if(!isEditingHex && !isFrozen) applyHsl(0,100,50,false); });
+
+        // --- Entrada manual del HEX (editable) ---
+        const hexInput=document.getElementById('currentColorCode');
+        function handleHexInput(){
+            const normalized=normalizeHex(hexInput.value);
+            if (isValidHex(normalized)) {
+                hexInput.classList.remove('invalid');
+                applyHex(normalized, true); // preserva exactamente el HEX digitado
+            } else {
+                hexInput.classList.add('invalid');
+            }
+        }
+        hexInput.addEventListener('focus', ()=>{ isEditingHex=true; });
+        hexInput.addEventListener('blur', ()=>{ isEditingHex=false; handleHexInput(); });
+        hexInput.addEventListener('input', handleHexInput);
+        hexInput.addEventListener('change', handleHexInput);
+        hexInput.addEventListener('keydown', (e)=>{ if (e.key==='Enter') hexInput.blur(); });
+
+        // Inicialización
+        updateCanvasSize();
+        window.addEventListener('resize', updateCanvasSize);
+        setFrozen(false);
+        applyHex('#FF0000', true);
+    </script>
+</body>
+</html>
